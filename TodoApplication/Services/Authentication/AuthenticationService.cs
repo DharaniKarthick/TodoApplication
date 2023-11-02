@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using NuGet.Protocol.Plugins;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using TodoApplication.Authentication;
 using TodoApplication.Entities;
 using TodoApplication.Services.IAuthentication;
+using ToDoApplication.Entities.Authentication;
 
 namespace TodoApplication.Services.Authentication
 {
@@ -34,6 +32,7 @@ namespace TodoApplication.Services.Authentication
                 var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.UserData,user.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -54,6 +53,7 @@ namespace TodoApplication.Services.Authentication
 
                 return JsonConvert.SerializeObject(new
                 {
+                    userId = user.Id,
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo
                 });
@@ -82,6 +82,11 @@ namespace TodoApplication.Services.Authentication
             if (!result.Succeeded)
             {
                 return null;
+            }
+            await roleManager.CreateAsync(new IdentityRole(UserRole.User));
+            if (!await roleManager.RoleExistsAsync(UserRole.User))
+            {
+                await roleManager.CreateAsync(new IdentityRole(UserRole.User));
             }
             return "User Successfully created";
 

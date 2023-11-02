@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TodoApplication.Authentication;
 using TodoApplication.Entities;
 using ToDoApplication.BAL.IToDoApplicationService;
+using ToDoApplication.Entities.Authentication;
 
 namespace TodoApplication.Controllers
 {
@@ -30,7 +24,16 @@ namespace TodoApplication.Controllers
         {
             try
             {
-                return Ok(await _bal.GetToDoItems());
+                var principal = HttpContext.User;
+                var userId = principal?.Claims?.SingleOrDefault
+                    (p => p.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/userdata")?.Value;
+                var userRole = principal?.Claims?.SingleOrDefault
+                (p => p.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+                if (userRole == null)
+                {
+                    userRole = UserRole.User;
+                }
+                return Ok(await _bal.GetToDoItems(userId,userRole));
             }
             catch(Exception ex)
             {
@@ -45,7 +48,16 @@ namespace TodoApplication.Controllers
         {
             try
             {
-                return Ok(await _bal.GetToDoItem(id));
+                var principal = HttpContext.User;
+                var userId = principal?.Claims?.SingleOrDefault
+                    (p => p.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/userdata")?.Value;
+                var userRole = principal?.Claims?.SingleOrDefault
+                (p => p.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+                if (userRole == null)
+                {
+                    userRole = UserRole.User;
+                }
+                return Ok(await _bal.GetToDoItem(id,userId,userRole));
             }
             catch (Exception ex)
             {
@@ -84,6 +96,16 @@ namespace TodoApplication.Controllers
         {
             try
             {
+                var principal = HttpContext.User;
+                var userId = principal?.Claims?.SingleOrDefault
+                    (p => p.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/userdata")?.Value;
+                var userRole = principal?.Claims?.SingleOrDefault
+                (p => p.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+                if (userRole == null)
+                {
+                    userRole = UserRole.User;
+                }
+                toDoItem.UserId = userId;
                 var result = await _bal.SaveToDoItem(toDoItem);
                 if (result != null)
                 {
@@ -108,7 +130,16 @@ namespace TodoApplication.Controllers
         {
             try
             {
-                var result= await _bal.DeleteToDoItem(id);
+                var principal = HttpContext.User;
+                var userId = principal?.Claims?.SingleOrDefault
+                    (p => p.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/userdata")?.Value;
+                var userRole = principal?.Claims?.SingleOrDefault
+                (p => p.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+                if (userRole == null)
+                {
+                    userRole = UserRole.User;
+                }
+                var result= await _bal.DeleteToDoItem(id,userId,userRole);
                 if (result != null)
                 {
                     return Ok(result);

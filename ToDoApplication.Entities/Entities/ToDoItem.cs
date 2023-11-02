@@ -20,6 +20,7 @@ namespace TodoApplication.Entities
         [Required(ErrorMessage = "ItemStatus is required")]
         [Column(TypeName = "bit")]
         public bool ItemStatus { get; set; }
+        public string? UserId { get; set; }
     }
 
 

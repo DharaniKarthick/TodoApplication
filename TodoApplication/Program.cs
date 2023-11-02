@@ -1,10 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using TodoApplication.Entities;
-using TodoApplication.Controllers;
 using Microsoft.AspNetCore.Identity;
-using System;
-using TodoApplication.Authentication;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -15,6 +11,7 @@ using ToDoApplication.BAL.IToDoApplicationService;
 using ToDoApplication.BAL.ToDoApplicationService;
 using ToDoApplication.DAL.IToDoApplicationRepository;
 using ToDoApplication.DAL.ToDoApplicationRepository;
+using ToDoApplication.Entities.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 

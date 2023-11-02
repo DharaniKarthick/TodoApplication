@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="IToDoApplicationService\IAuthenticationService\" />
-    <Folder Include="ToDoApplicationService\AuthenticationService\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ToDoApplication.DAL\ToDoApplication.DAL.csproj" />
     <ProjectReference Include="..\ToDoApplication.Entities\ToDoApplication.Entities.csproj" />
   </ItemGroup>

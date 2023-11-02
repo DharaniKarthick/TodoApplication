@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 using TodoApplication.Entities;
 using ToDoApplication.DAL.IToDoApplicationRepository;
 
@@ -17,7 +13,7 @@ namespace ToDoApplication.DAL.ToDoApplicationRepository
         {
             _context = context;
         }
-        public async Task<string> DeleteToDoItem(int id)
+        public async Task<string> DeleteToDoItem(int id,string userId,string role)
         {
             if (_context.ToDoItems == null)
             {
@@ -28,23 +24,44 @@ namespace ToDoApplication.DAL.ToDoApplicationRepository
             {
                 return null; ;
             }
+            if (userId == toDoItem.UserId || role == UserRole.Admin)
+            {
+                _context.ToDoItems.Remove(toDoItem);
+                await _context.SaveChangesAsync();
 
-            _context.ToDoItems.Remove(toDoItem);
-            await _context.SaveChangesAsync();
-
-            return "ToDo Item Deleted";
+                return "ToDo Item Deleted";
+            }
+            return null;
         }
 
-        public async Task<ToDoItem> GetToDoItem(int id)
+        public async Task<ToDoItem> GetToDoItem(int id, string userId,string role)
         {
-           
-            var toDoItem = await _context.ToDoItems.FindAsync(id);
+
+            dynamic toDoItem=null;
+            if (role == UserRole.User)
+            {
+                toDoItem= await _context.ToDoItems
+                .Where(b => b.UserId == userId && b.ItemId == id).FirstOrDefaultAsync();
+            }
+            else
+            {
+                toDoItem = await _context.ToDoItems.FindAsync(id);
+            }
             return toDoItem;
         }
 
-        public async Task<List<ToDoItem>> GetToDoItems()
-        {            
-            var res= await _context.ToDoItems.ToListAsync();
+        public async Task<List<ToDoItem>> GetToDoItems(string userId, string role)
+        {
+            dynamic res = null;
+            if (role == UserRole.User)
+            {
+                res = await _context.ToDoItems
+                .Where(b => b.UserId == userId).ToListAsync();
+            }
+            else
+            {
+                res = await _context.ToDoItems.ToListAsync();
+            }
             return res;
         }
 
@@ -71,7 +88,7 @@ namespace ToDoApplication.DAL.ToDoApplicationRepository
             {
                 return null;
             }
-
+            
             _context.Entry(item).State = EntityState.Modified;
 
             try

@@ -16,19 +16,19 @@ namespace ToDoApplication.BAL.ToDoApplicationService
         {
             _dal = dal;
         }
-        public Task<string> DeleteToDoItem(int id)
+        public Task<string> DeleteToDoItem(int id, string userId, string role)
         {
-            return _dal.DeleteToDoItem(id);
+            return _dal.DeleteToDoItem(id,userId,role);
         }
 
-        public Task<ToDoItem> GetToDoItem(int id)
+        public Task<ToDoItem> GetToDoItem(int id, string userId, string role)
         {
-            return _dal.GetToDoItem(id);
+            return _dal.GetToDoItem(id, userId, role);
         }
 
-        public Task<List<ToDoItem>> GetToDoItems()
+        public Task<List<ToDoItem>> GetToDoItems(string userId, string role)
         {
-            return _dal.GetToDoItems();
+            return _dal.GetToDoItems(userId,role);
         }
 
         public bool isItemExist(int id)

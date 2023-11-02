@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using TodoApplication.Authentication;
+using ToDoApplication.Entities.Authentication;
 
 namespace TodoApplication.Entities
 {
