@@ -23,3 +23,9 @@ This is a simple TODO application built using .NET and Azure services. It allows
 - Authentication and authorization
 - Admin can perform CRUD action on all tasks
 - Users can perform CRUD operation on the tasks created by them
+
+  ## Usage
+
+- Access the application by navigating to the Azure App Service URL.
+- https://todoapplication20231102110016.azurewebsites.net
+
