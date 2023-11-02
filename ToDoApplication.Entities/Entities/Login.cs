@@ -7,9 +7,9 @@ namespace TodoApplication.Entities
         [Required(ErrorMessage = "Username is required")]
         public string? Username { get; set; }
 
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
-            ErrorMessage = "Minimum eight characters, at least one uppercase letter,"
-             + "one lowercase letter, one number and one special character")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
         [Required(ErrorMessage = "Password is required")]
         public string? Password { get; set; }
     }
